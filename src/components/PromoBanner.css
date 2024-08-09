@@ -10,7 +10,7 @@
     height: 190px;
   }
   
-  .promo-video video {
+  .promo-video img {
     width: 100%; /* Hace que el video ocupe el 100% del ancho */
     height: auto; /* Mantiene la proporción del video */
     margin-top: 0; /* Asegura que no haya margen superior */

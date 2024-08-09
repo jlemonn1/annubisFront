@@ -1,5 +1,5 @@
 import React from 'react';
-import video from './img/inicio.mp4';
+import img from './img/inicio.png';
 import './PromoBanner.css';
 
 const PromoBanner = () => {
@@ -10,10 +10,7 @@ const PromoBanner = () => {
   return (
     <div className="promo-banner">
       <div className="promo-video">
-        <video autoPlay loop muted playsInline>
-          <source src={video} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <img src={img} alt="Inicio Promo" />
       </div>
       <button className="shop-now" onClick={handleScroll}>Shop now 🔥</button>
       <p>🔥 Productos de impresión 3D.</p>
@@ -24,5 +21,3 @@ const PromoBanner = () => {
 };
 
 export default PromoBanner;
-
-

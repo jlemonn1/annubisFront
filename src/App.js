@@ -7,16 +7,16 @@ import Navbar from './components/Navbar';
 import PromoBanner from './components/PromoBanner';
 import FeaturedProducts from './components/FeaturedProducts';
 import ProductDetails from './components/ProductDetails';
-import Hogar from './components/Hogar';
-import Herramientas from './components/Herramientas';
-import Ninos from './components/Ninos';
-import Friki from './components/Friki';
 import CartPage from './components/CartPage';
 import ShippingPage from './components/ShippingPage';
 import OrderProcessing from './components/OrderProcessing';
 import OrderDetails from './components/OrderDetails';
 import ScrollToTop from './components/ScrollToTop'; // Asegúrate de que el nombre sea correcto
 
+//Importar las secciones
+import Tees from './components/Tees';
+import Hoodies from './components/Hoodies';
+import Accessories from './components/Accessories';
 
 const App = () => (
   <div className="App">
@@ -35,34 +35,6 @@ const App = () => (
           <Header />
           <Navbar />
           <ProductDetails />
-        </>
-      } />
-      <Route path="/hogar" element={
-        <>
-          <Header />
-          <Navbar />
-          <Hogar />
-        </>
-      } />
-      <Route path="/herramientas" element={
-        <>
-          <Header />
-          <Navbar />
-          <Herramientas />
-        </>
-      } />
-      <Route path="/ninos" element={
-        <>
-          <Header />
-          <Navbar />
-          <Ninos />
-        </>
-      } />
-      <Route path="/friki" element={
-        <>
-          <Header />
-          <Navbar />
-          <Friki />
         </>
       } />
       <Route path="/cart" element={
@@ -91,8 +63,35 @@ const App = () => (
           <OrderDetails />
         </>
       } />
+
+
+      <Route path="/tees" element={
+        <>
+          <Header />
+          <Navbar />
+          <Tees />
+        </>
+      } />
+
+      <Route path="/hoodies" element={
+        <>
+          <Header />
+          <Navbar />
+          <Hoodies />
+        </>
+      } />
+
+      <Route path="/accessories" element={
+        <>
+          <Header />
+          <Navbar />
+          <Accessories />
+        </>
+      } />
     </Routes>
   </div>
 );
+
+
 
 export default App;
