@@ -13,6 +13,8 @@ import OrderProcessing from './components/OrderProcessing';
 import OrderDetails from './components/OrderDetails';
 import ScrollToTop from './components/ScrollToTop'; // Asegúrate de que el nombre sea correcto
 
+import ProductList from './components/admin/ProductList';
+
 //Importar las secciones
 import Tees from './components/Tees';
 import Hoodies from './components/Hoodies';
@@ -86,6 +88,14 @@ const App = () => (
           <Header />
           <Navbar />
           <Accessories />
+        </>
+      } />
+
+      <Route path="/admin" element={
+        <>
+          <Header />
+          <Navbar />
+          <ProductList />
         </>
       } />
     </Routes>
