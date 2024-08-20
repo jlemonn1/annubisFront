@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+// src/components/ProductForm.js
+import React, { useState, useEffect, forwardRef } from 'react';
 import axios from 'axios';
 import './admin.css';
 
-const ProductForm = ({ productToEdit, onSave }) => {
+const ProductForm = forwardRef(({ productToEdit, onSave }, ref) => {
     const [product, setProduct] = useState({
         name: '',
         category: '',
@@ -16,8 +17,6 @@ const ProductForm = ({ productToEdit, onSave }) => {
     const [sizeNotAvailable, setSizeNotAvailable] = useState(false);
     const [colorNotAvailable, setColorNotAvailable] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
-
-    const formRef = useRef(null);
 
     useEffect(() => {
         if (productToEdit) {
@@ -68,23 +67,30 @@ const ProductForm = ({ productToEdit, onSave }) => {
         formData.append('price', product.price);
         formData.append('size', product.size);
         formData.append('color', product.color);
-        formData.append('cat', product.category); // assuming 'cat' is the category
+        formData.append('cat', product.category);
         files.forEach(file => formData.append('images', file));
-
+    
         const url = productToEdit
-            ? `http://200.234.229.234:8080/api/products/${productToEdit.id}`
-            : 'http://200.234.229.234:8080/api/products';
-
+            ? `http://localhost:8080/api/products/${productToEdit.id}`
+            : 'http://localhost:8080/api/products';
+    
         const method = productToEdit ? 'put' : 'post';
-
-        const response = await axios[method](url, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-
-        return response.data;
+    
+        try {
+            const response = await axios[method](url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Response from server:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error during product upload:', error.response ? error.response.data : error.message);
+            throw error;
+        }
     };
+    
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -101,13 +107,13 @@ const ProductForm = ({ productToEdit, onSave }) => {
     };
 
     const scrollToForm = () => {
-        if (formRef.current) {
-            formRef.current.scrollIntoView({ behavior: 'smooth' });
+        if (ref.current) {
+            ref.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
     return (
-        <form className="admin-form" onSubmit={handleSubmit} ref={formRef}>
+        <form className="admin-form" onSubmit={handleSubmit} ref={ref}>
             <label>
                 Nombre:
                 <input type="text" name="name" value={product.name} onChange={handleChange} required />
@@ -169,6 +175,6 @@ const ProductForm = ({ productToEdit, onSave }) => {
             <button className="admin-button" type="submit" onClick={scrollToForm}>Guardar</button>
         </form>
     );
-};
+});
 
 export default ProductForm;

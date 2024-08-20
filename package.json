@@ -15,6 +15,7 @@
     "@vis.gl/react-google-maps": "^1.1.0",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
+    "dominio3d": "file:",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",

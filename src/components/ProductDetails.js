@@ -9,7 +9,17 @@ import { toast } from 'react-toastify';
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
+
+  // Set default product structure
+  const [product, setProduct] = useState({
+    images: [], // Assuming 'images' holds base64-encoded image strings
+    size: '',
+    color: '',
+    category: '',
+    name: '',
+    price: 0,
+    description: '',
+  });
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -23,28 +33,29 @@ const ProductDetails = () => {
   }, [id]);
 
   useEffect(() => {
-    fetch(`http://200.234.229.234:8080/api/products/${id}`)
-      .then(response => response.json())
-      .then(data => setProduct(data))
-      .catch(error => console.error('Error fetching product details:', error));
+    // Fetch product details based on the ID from URL
+    fetch(`http://localhost:8080/api/products/${id}`)
+      .then((response) => response.json())
+      .then((data) => setProduct(data))
+      .catch((error) => console.error('Error fetching product details:', error));
   }, [id]);
 
   useEffect(() => {
     if (product) {
-      fetch('http://200.234.229.234:8080/api/products')
-        .then(response => response.json())
-        .then(products => {
-          const filteredProducts = products.filter(p => p.id !== id);
+      // Fetch related products, excluding the current one
+      fetch('http://localhost:8080/api/products')
+        .then((response) => response.json())
+        .then((products) => {
+          const filteredProducts = products.filter((p) => p.id !== id);
           setRelatedProducts(filteredProducts);
         })
-        .catch(error => console.error('Error fetching all products:', error));
+        .catch((error) => console.error('Error fetching all products:', error));
     }
   }, [product, id]);
 
-  if (!product) return <p>Loading...</p>;
-
   const processOptions = (options) => {
-    return options.split(',').map(option => {
+    // Process options such as size and color
+    return options.split(',').map((option) => {
       const trimmedOption = option.trim();
       const isNotAvailable = trimmedOption.startsWith('-');
       const displayOption = isNotAvailable ? trimmedOption.substring(1).trim() : trimmedOption;
@@ -65,10 +76,11 @@ const ProductDetails = () => {
     ));
   };
 
-  const handleIncrement = () => setQuantity(prev => prev + 1);
-  const handleDecrement = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
+  const handleIncrement = () => setQuantity((prev) => prev + 1);
+  const handleDecrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const isAddToCartDisabled = () => {
+    // Disable add to cart if size or color isn't selected when they are available
     return (sizes.length > 0 && !selectedSize) || (colors.length > 0 && !selectedColor);
   };
 
@@ -83,6 +95,7 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
+    // Handle adding the product to the cart
     if (isAddToCartDisabled()) {
       setHasAttemptedAddToCart(true);
       return;
@@ -90,32 +103,34 @@ const ProductDetails = () => {
       setHasAttemptedAddToCart(false);
       const email = getCookie('userEmail');
       const cartItem = {
-        product: { id: product.id, name: product.name, price: product.price, urlImg: product.urlImg },
+        product: { id: product.id, name: product.name, price: product.price, images: product.images },
         color: selectedColor,
         size: selectedSize,
-        quantity: quantity
+        quantity: quantity,
       };
 
       if (email) {
-        fetch(`http://200.234.229.234:8080/api/carts/email/${email}/items`, {
+        // Post cart item to the user's cart on the server
+        fetch(`http://localhost:8080/api/carts/email/${email}/items`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify(cartItem)
+          body: JSON.stringify(cartItem),
         })
-          .then(response => {
+          .then((response) => {
             if (response.ok) {
-              toast.error('Producto añadido al carrito exitosamente.');
+              toast.success('Producto añadido al carrito exitosamente.');
             } else {
               throw new Error('Error al añadir el producto al carrito.');
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.error('Error:', error);
             toast.error('Hubo un problema al añadir el producto al carrito.');
           });
       } else {
+        // Handle adding to cart via local storage if no user is logged in
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         cart.push(cartItem);
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -136,11 +151,18 @@ const ProductDetails = () => {
       <div className="product-main-content">
         <div className="product-carousel">
           <Carousel>
-            {product.urlImg.map((img, index) => (
-              <div key={index}>
-                <img src={img} alt={`${product.name} - ${index + 1}`} />
-              </div>
-            ))}
+            {product.images && product.images.length > 0 ? (
+              product.images.map((base64Image, index) => (
+                <div key={index}>
+                  <img
+                    src={`data:image/jpeg;base64,${base64Image}`}
+                    alt={`${product.name} - ${index + 1}`}
+                  />
+                </div>
+              ))
+            ) : (
+              <div>No images available</div>
+            )}
           </Carousel>
         </div>
 
@@ -151,11 +173,11 @@ const ProductDetails = () => {
           <p className="description">{formatDescription(product.description)}</p>
 
           {sizes.length > 0 && (
-            <div className={`selector ${(!selectedSize && sizes.length > 0 && hasAttemptedAddToCart) ? 'error' : ''}`}>
-              <div
-                className="selector-button"
-                onClick={() => setShowSizeOptions(prev => !prev)}
-              >
+            <div
+              className={`selector ${!selectedSize && sizes.length > 0 && hasAttemptedAddToCart ? 'error' : ''
+                }`}
+            >
+              <div className="selector-button" onClick={() => setShowSizeOptions((prev) => !prev)}>
                 Tamaño: {selectedSize || 'Selecciona tamaño'}
                 <span>{showSizeOptions ? '▲' : '▼'}</span>
               </div>
@@ -179,11 +201,11 @@ const ProductDetails = () => {
           )}
 
           {colors.length > 0 && (
-            <div className={`selector ${(!selectedColor && colors.length > 0 && hasAttemptedAddToCart) ? 'error' : ''}`}>
-              <div
-                className="selector-button"
-                onClick={() => setShowColorOptions(prev => !prev)}
-              >
+            <div
+              className={`selector ${!selectedColor && colors.length > 0 && hasAttemptedAddToCart ? 'error' : ''
+                }`}
+            >
+              <div className="selector-button" onClick={() => setShowColorOptions((prev) => !prev)}>
                 Color: {selectedColor || 'Selecciona color'}
                 <span>{showColorOptions ? '▲' : '▼'}</span>
               </div>
@@ -220,11 +242,7 @@ const ProductDetails = () => {
             >
               Añadir al carrito
             </button>
-            <button
-              className="buy-now"
-              onClick={handleBuyNow}
-              disabled={isAddToCartDisabled()}
-            >
+            <button className="buy-now" onClick={handleBuyNow} disabled={isAddToCartDisabled()}>
               Comprar ahora
             </button>
           </div>
@@ -234,16 +252,21 @@ const ProductDetails = () => {
       <div className="related-products">
         <h2>Productos Relacionados</h2>
         <div className="related-products-container">
-          {relatedProducts.map(product => (
+          {relatedProducts.map((relatedProduct) => (
             <ProductCard
-              key={product.id}
-              title={product.name}
-              price={product.price}
-              image={product.urlImg[0]}
-              onClick={() => handleProductClick(product.id)}
+              key={relatedProduct.id}
+              title={relatedProduct.name}
+              price={relatedProduct.price}
+              image={
+                relatedProduct.images && relatedProduct.images.length > 0
+                  ? `data:image/jpeg;base64,${relatedProduct.images[0]}`
+                  : ''
+              } // Use base64 image
+              onClick={() => handleProductClick(relatedProduct.id)}
             />
           ))}
         </div>
+
       </div>
     </div>
   );

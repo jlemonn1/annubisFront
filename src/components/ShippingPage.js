@@ -18,7 +18,7 @@ const ShippingPage = () => {
   const [discountStatus, setDiscountStatus] = useState('default'); // Estado para el código de descuento
 
   useEffect(() => {
-    fetch(`http://200.234.229.234:8080/api/carts/email/${email}`)
+    fetch(`http://localhost:8080/api/carts/email/${email}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -84,7 +84,7 @@ const ShippingPage = () => {
       .replace(/\s+/g, '-')
       .replace(/\//g, '-');
     const shippingCost = getShippingCost();
-    const checkoutUrl = `http://200.234.229.234:8080/api/checkout/create-checkout-session?cartEmail=${email}&shippingCost=${shippingCost}&mobileNumber=${mobileNumber}&fullAddress=${formattedAddress}&typeShipping=${shippingOption}&discountName=${discountCode}`;
+    const checkoutUrl = `http://localhost:8080/api/checkout/create-checkout-session?cartEmail=${email}&shippingCost=${shippingCost}&mobileNumber=${mobileNumber}&fullAddress=${formattedAddress}&typeShipping=${shippingOption}&discountName=${discountCode}`;
     console.log('Checkout URL:', checkoutUrl);
 
     fetch(checkoutUrl)
@@ -105,7 +105,7 @@ const ShippingPage = () => {
   };
 
   const applyDiscount = () => {
-    fetch(`http://200.234.229.234:8080/api/discounts/nombre/${discountCode}`)
+    fetch(`http://localhost:8080/api/discounts/nombre/${discountCode}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Discount not found');

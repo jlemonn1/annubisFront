@@ -17,7 +17,7 @@ const ProductList = () => {
     }, []);
 
     const fetchProducts = async () => {
-        const response = await axios.get('http://200.234.229.234:8080/api/products');
+        const response = await axios.get('http://localhost:8080/api/products');
         setProducts(response.data);
     };
 
@@ -27,7 +27,7 @@ const ProductList = () => {
     };
 
     const handleDelete = async (id) => {
-        await axios.delete(`http://200.234.229.234:8080/api/products/${id}`);
+        await axios.delete(`http://localhost:8080/api/products/${id}`);
         fetchProducts();
     };
 

@@ -54,7 +54,7 @@ const CartPage = () => {
     const encodedEmail = encodeURIComponent(email);
     console.log('Encoded Email for fetch:', encodedEmail);
 
-    fetch(`http://200.234.229.234:8080/api/carts/email/${encodedEmail}`)
+    fetch(`http://localhost:8080/api/carts/email/${encodedEmail}`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -87,7 +87,7 @@ const CartPage = () => {
         const encodedEmail = encodeURIComponent(email);
         console.log(`Intentando eliminar el carrito existente para el email: ${encodedEmail}`);
 
-        fetch(`http://200.234.229.234:8080/api/carts/email/${encodedEmail}`, {
+        fetch(`http://localhost:8080/api/carts/email/${encodedEmail}`, {
           method: 'DELETE'
         })
         .then(response => {
@@ -111,7 +111,7 @@ const CartPage = () => {
 
           console.log('Enviando datos del carrito:', JSON.stringify(cartData));
 
-          return fetch('http://200.234.229.234:8080/api/carts', {
+          return fetch('http://localhost:8080/api/carts', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -156,7 +156,7 @@ const CartPage = () => {
     const userEmail = getCookie('userEmail');
     if (userEmail) {
       const encodedEmail = decodeEmail(userEmail);
-      fetch(`http://200.234.229.234:8080/api/carts/email/${encodedEmail}/items/${itemToRemove.id}`, {
+      fetch(`http://localhost:8080/api/carts/email/${encodedEmail}/items/${itemToRemove.id}`, {
         method: 'DELETE'
       })
       .catch(error => console.error('Error al eliminar el producto del carrito:', error));
@@ -209,9 +209,13 @@ const CartPage = () => {
       <div className="cart-items">
         {cart.map((item, index) => (
           <div key={index} className="cart-item">
-            {item.product.urlImg && item.product.urlImg.length > 0 ? (
-              <img src={item.product.urlImg[0]} alt={item.product.name} className="cart-item-image" />
-            ) : (
+            {item.product.images && item.product.images.length > 0 ? (
+                            <img 
+                                src={`data:image/jpeg;base64,${item.product.images[0]}`} 
+                                alt={item.product.name} 
+                                className="cart-item-image" 
+                            />
+                        ) : (
               <div className="cart-item-placeholder">No image available</div>
             )}
             <div className="cart-item-details">

@@ -9,7 +9,7 @@ const FeaturedProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://200.234.229.234:8080/api/products')
+    fetch('http://localhost:8080/api/products')
       .then(response => response.json())
       .then(data => setProducts(data))
       .catch(error => console.error('Error fetching products:', error));
@@ -58,7 +58,7 @@ const FeaturedProducts = () => {
           <ProductCard 
             title={product.name}
             price={product.price}
-            image={product.urlImg[0]} // Tomar la primera imagen del array urlImg
+            image={`data:image/jpeg;base64,${product.images[0]}`} // Tomar la primera imagen del array de imágenes en base64
             onClick={() => handleProductClick(product.id)} // Llama a handleProductClick con el ID del producto
           />
         </div>
