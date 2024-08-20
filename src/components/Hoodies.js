@@ -9,7 +9,7 @@ const Herramientas = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/products')
+    fetch('http://200.234.229.234:8080/api/products')
       .then(response => response.json())
       .then(data => setProducts(data))
       .catch(error => console.error('Error fetching products:', error));

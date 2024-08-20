@@ -71,8 +71,8 @@ const ProductForm = forwardRef(({ productToEdit, onSave }, ref) => {
         files.forEach(file => formData.append('images', file));
     
         const url = productToEdit
-            ? `http://localhost:8080/api/products/${productToEdit.id}`
-            : 'http://localhost:8080/api/products';
+            ? `http://200.234.229.234:8080/api/products/${productToEdit.id}`
+            : 'http://200.234.229.234:8080/api/products';
     
         const method = productToEdit ? 'put' : 'post';
     
