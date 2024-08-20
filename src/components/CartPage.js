@@ -54,7 +54,7 @@ const CartPage = () => {
     const encodedEmail = encodeURIComponent(email);
     console.log('Encoded Email for fetch:', encodedEmail);
 
-    fetch(`http://200.234.229.234:8080/api/carts/email/${encodedEmail}`)
+    fetch(`https://200.234.229.234:8080/api/carts/email/${encodedEmail}`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -87,7 +87,7 @@ const CartPage = () => {
         const encodedEmail = encodeURIComponent(email);
         console.log(`Intentando eliminar el carrito existente para el email: ${encodedEmail}`);
 
-        fetch(`http://200.234.229.234:8080/api/carts/email/${encodedEmail}`, {
+        fetch(`https://200.234.229.234:8080/api/carts/email/${encodedEmail}`, {
           method: 'DELETE'
         })
         .then(response => {
@@ -111,7 +111,7 @@ const CartPage = () => {
 
           console.log('Enviando datos del carrito:', JSON.stringify(cartData));
 
-          return fetch('http://200.234.229.234:8080/api/carts', {
+          return fetch('https://200.234.229.234:8080/api/carts', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -156,7 +156,7 @@ const CartPage = () => {
     const userEmail = getCookie('userEmail');
     if (userEmail) {
       const encodedEmail = decodeEmail(userEmail);
-      fetch(`http://200.234.229.234:8080/api/carts/email/${encodedEmail}/items/${itemToRemove.id}`, {
+      fetch(`https://200.234.229.234:8080/api/carts/email/${encodedEmail}/items/${itemToRemove.id}`, {
         method: 'DELETE'
       })
       .catch(error => console.error('Error al eliminar el producto del carrito:', error));
