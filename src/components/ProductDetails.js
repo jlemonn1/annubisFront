@@ -34,7 +34,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     // Fetch product details based on the ID from URL
-    fetch(`https://200.234.229.234:8080/api/products/${id}`)
+    fetch(`/api/products/${id}`)
       .then((response) => response.json())
       .then((data) => setProduct(data))
       .catch((error) => console.error('Error fetching product details:', error));
@@ -43,7 +43,7 @@ const ProductDetails = () => {
   useEffect(() => {
     if (product) {
       // Fetch related products, excluding the current one
-      fetch('https://200.234.229.234:8080/api/products')
+      fetch('/api/products')
         .then((response) => response.json())
         .then((products) => {
           const filteredProducts = products.filter((p) => p.id !== id);
@@ -111,7 +111,7 @@ const ProductDetails = () => {
 
       if (email) {
         // Post cart item to the user's cart on the server
-        fetch(`https://200.234.229.234:8080/api/carts/email/${email}/items`, {
+        fetch(`/api/carts/email/${email}/items`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

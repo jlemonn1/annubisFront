@@ -9,7 +9,7 @@ const FeaturedProducts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://200.234.229.234:8080/api/products')
+    fetch('/api/products')
       .then(response => response.json())
       .then(data => setProducts(data))
       .catch(error => console.error('Error fetching products:', error));

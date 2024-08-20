@@ -22,7 +22,7 @@ const OrderProcessing = () => {
         try {
 
 
-          const cartResponse = await fetch(`https://200.234.229.234:8080/api/carts/email/${email}`);
+          const cartResponse = await fetch(`/api/carts/email/${email}`);
           
           if (!cartResponse.ok) {
             throw new Error('No se encontró un carrito para el correo electrónico proporcionado.');
@@ -43,7 +43,7 @@ const OrderProcessing = () => {
       const createOrderFromCart = async () => {
         try {
 
-          const response = await fetch('https://200.234.229.234:8080/api/orders/from-cart', {
+          const response = await fetch('/api/orders/from-cart', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -71,7 +71,7 @@ const OrderProcessing = () => {
       const verifyPurchase = async (orderId) => {
         try {
 
-          const response = await fetch('https://200.234.229.234:8080/api/checkout/verify-purchase', {
+          const response = await fetch('/api/checkout/verify-purchase', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
